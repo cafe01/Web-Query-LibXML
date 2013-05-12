@@ -29,7 +29,7 @@ sub find {
     
     my @new;
     for my $tree (@{$self->{trees}}) {
-        my $is_root = ref $tree->parent->{node} eq 'XML::LibXML::Document';
+        my $is_root = defined $tree->parent && ref $tree->parent->{node} eq 'XML::LibXML::Document';
         push @new, $tree if !$is_root && $tree->matches($xpath_rootless);
         push @new, $tree->findnodes(selector_to_xpath($selector, root => $is_root ? '/' : './'));
     }
