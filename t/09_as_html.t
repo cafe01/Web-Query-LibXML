@@ -4,7 +4,7 @@ use warnings;
 use Test::More tests => 4;
 use Web::Query::LibXML;
 
-my $inner = "<head><script/></head><body><p>Hi there</p><p>How is life?</p></body>";
+my $inner = "<head><script></script></head><body><p>Hi there</p><p>How is life?</p></body>";
 my $html = "<html>$inner</html>";
 
 my $q = Web::Query::LibXML->new($html);

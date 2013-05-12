@@ -18,8 +18,8 @@ is $q->find('u')->replace_with($q->find('b'))->end->as_html
 is wq($html)->find('p *')->replace_with(sub {
     my $i = $_->text;
     return "<$i></$i>";
-} )->end->as_html => '<p><hi/><there/><world/></p>';
+} )->end->as_html => '<p><hi></hi><there></there><world></world></p>';
 
 is wq($html)->find('p *')->replace_with( '<blink />' )->end->as_html
-    => '<p><blink/><blink/><blink/></p>';
+    => '<p><blink></blink><blink></blink><blink></blink></p>';
 
