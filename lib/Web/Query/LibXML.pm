@@ -26,15 +26,24 @@ sub _build_tree {
 sub find {
     my ($self, $selector) = @_;
     my $xpath_rootless = selector_to_xpath($selector);
+    #warn "Selector: $xpath_rootless\n";
     
     my @new;
     for my $tree (@{$self->{trees}}) {
+        #warn $tree->{node}->nodePath."\n";
         my $is_root = defined $tree->parent && ref $tree->parent->{node} eq 'XML::LibXML::Document';
-        push @new, $tree if !$is_root && $tree->matches($xpath_rootless);
+        #push @new, $tree if !$is_root && $tree->matches($xpath_rootless);
         push @new, $tree->findnodes(selector_to_xpath($selector, root => $is_root ? '/' : './'));
     }
     
-    return (ref $self || $self)->new_from_element(\@new, $self);
+    # in a document with multiple root elements, duplicated nodes can appear in @new, filter them out (yeah, its ugly)
+    my @unique;
+    foreach my $node (@new) {
+        push @unique, $node 
+            unless grep { $node->{node}->isSameNode($_->{node}) } @unique;
+    }
+    
+    return (ref $self || $self)->new_from_element(\@unique, $self);
 }
 
 
